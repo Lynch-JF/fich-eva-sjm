@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evaluación de Liderazgo – Encargado de Almacén</title>
+<style>
+  :root{
+    --ink:#1b2125; --muted:#5b6670; --line:#c9d0d6; --soft:#eef2f4;
+    --accent:#1f4e5f; --accent-soft:#e3edf0; --warn:#9a3b12; --warn-soft:#fbeee6; --ok:#2d6a3e;
+    --paper:#ffffff; --desk:#e6e9ec;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{margin:0;background:var(--desk);color:var(--ink);
+    font:13px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
+  .toolbar{position:sticky;top:0;z-index:5;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+    padding:10px 16px;background:#1b2125;color:#fff}
+  .toolbar button{font:inherit;border:0;border-radius:6px;padding:7px 14px;cursor:pointer;background:#fff;color:#1b2125}
+  .toolbar button.primary{background:#4fa3b8;color:#fff;font-weight:600}
+  .toolbar span{align-self:center;opacity:.75;font-size:12px}
+  .sheet{max-width:8.5in;margin:24px auto;background:var(--paper);padding:.7in .75in;box-shadow:0 2px 14px rgba(0,0,0,.12)}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:var(--accent);margin:0}
+  h1{font-size:23px;line-height:1.2}
+  h2{font-size:16px;margin:26px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--accent);
+    display:flex;justify-content:space-between;align-items:baseline;gap:12px;break-after:avoid}
+  h2 .w{font:600 12px/1 "Segoe UI",system-ui,sans-serif;color:#fff;background:var(--accent);padding:4px 8px;border-radius:3px;white-space:nowrap}
+  h3{font-size:14px;margin:16px 0 6px;break-after:avoid;page-break-after:avoid}
+  p{margin:6px 0}
+  .muted{color:var(--muted)}
+  .small{font-size:11.5px}
+
+  .head{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;border-bottom:3px double var(--accent);padding-bottom:12px}
+  .head .org{font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:11px;color:var(--muted)}
+  .head .meta{text-align:right;font-size:11px;color:var(--muted);line-height:1.6}
+  .badge{display:inline-block;border:1px solid var(--warn);color:var(--warn);padding:1px 7px;border-radius:3px;font-weight:600;font-size:10.5px;letter-spacing:.05em}
+
+  table{width:100%;border-collapse:collapse;margin:6px 0}
+  th,td{border:1px solid var(--line);padding:6px 8px;vertical-align:top;text-align:left}
+  th{background:var(--soft);font-weight:600;font-size:12px}
+  td.lbl{width:34%;background:#fafbfc;font-weight:600}
+  .num{text-align:center;white-space:nowrap}
+
+  input[type=text],textarea{width:100%;font:inherit;color:var(--ink);border:0;border-bottom:1px solid var(--line);
+    background:transparent;padding:3px 2px;outline:none}
+  input[type=text]:focus,textarea:focus{border-bottom-color:var(--accent);background:#f7fbfc}
+  textarea{resize:none;overflow:hidden;min-height:46px;border:1px solid var(--line);border-radius:3px;padding:6px 8px;
+    background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 21px,#eef0f2 21px,#eef0f2 22px);
+    background-position:0 5px;line-height:22px}
+  textarea.tall{min-height:90px}
+  td input[type=text]{border-bottom:0}
+
+  .callout{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 12px;margin:10px 0;border-radius:0 4px 4px 0}
+  .callout.warn{background:var(--warn-soft);border-left-color:var(--warn)}
+  .callout ul{margin:4px 0;padding-left:18px}
+
+  /* Tarjetas de competencia */
+  .comp{border:1px solid var(--line);border-radius:4px;margin:10px 0;break-inside:avoid;page-break-inside:avoid}
+  .comp-h{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:8px 10px;background:#fafbfc;border-bottom:1px solid var(--line)}
+  .comp-h .id{font:700 12px/1 Georgia,serif;color:#fff;background:var(--accent);border-radius:3px;text-align:center;padding:6px 0}
+  .comp-h .t{font-weight:600}
+  .comp-h .d{font-size:11.5px;color:var(--muted);font-weight:400}
+  .anchors{display:grid;grid-template-columns:repeat(3,1fr);font-size:11px;border-bottom:1px solid var(--line)}
+  .anchors div{padding:6px 10px;border-right:1px dashed var(--line)}
+  .anchors div:last-child{border-right:0}
+  .anchors b{display:block;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  .comp-b{padding:8px 10px}
+  .comp-b label.ev{font-size:11px;color:var(--muted);display:block;margin-bottom:3px}
+
+  .rate{display:flex;gap:4px;flex-wrap:nowrap}
+  .rate label{position:relative;cursor:pointer}
+  .rate input{position:absolute;opacity:0;width:0;height:0}
+  .rate span{display:inline-block;min-width:27px;height:27px;line-height:25px;text-align:center;border:1.5px solid #8a959e;border-radius:4px;font-weight:600;font-size:12px;color:#3c464e;background:#fff;padding:0 4px}
+  .rate input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
+  .rate input:focus-visible+span{outline:2px solid #4fa3b8;outline-offset:1px}
+  .rate label:hover span{border-color:var(--accent)}
+
+  .blocksum{display:flex;justify-content:flex-end;gap:10px;align-items:center;margin:4px 0 0;font-size:12px}
+  .blocksum output{font:700 14px/1 Georgia,serif;color:var(--accent);border:1px solid var(--accent);border-radius:3px;padding:5px 10px;min-width:60px;text-align:center}
+
+  .scale td:first-child{width:60px;text-align:center;font-weight:700}
+  .pulse td,.pulse th{padding:5px 6px}
+  .pulse input[type=text]{text-align:center;width:42px;border:1px solid var(--line);border-radius:3px}
+  .result-box{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+  .result-box .card{border:1px solid var(--line);border-radius:4px;padding:10px 12px}
+  .result-box .big{font:700 30px/1.1 Georgia,serif;color:var(--accent)}
+  tr.hit td{background:var(--accent-soft);font-weight:600}
+  #alerts:empty{display:none}
+
+  .checks label{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px dotted var(--line);cursor:pointer}
+  .checks input{width:16px;height:16px;margin-top:1px;accent-color:var(--accent)}
+  input.inline{display:inline-block;width:150px}
+
+  .sign td{height:62px;vertical-align:bottom}
+  .sign td:first-child{vertical-align:middle;font-weight:600;background:#fafbfc;width:26%}
+  .foot{margin-top:28px;padding-top:8px;border-top:1px solid var(--line);font-size:10.5px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .keep{break-inside:avoid;page-break-inside:avoid}
+  .pb{break-before:page;page-break-before:always}
+
+  @media (max-width:700px){
+    .sheet{margin:0;padding:20px 16px;box-shadow:none}
+    .head{grid-template-columns:1fr}.head .meta{text-align:left}
+    .anchors{grid-template-columns:1fr}.anchors div{border-right:0;border-bottom:1px dashed var(--line)}
+    .comp-h{grid-template-columns:34px 1fr}.comp-h .rate{grid-column:1/-1}
+    .result-box{grid-template-columns:1fr}
+    table{display:block;overflow-x:auto}
+  }
+
+  @page{size:letter;margin:.55in .6in}
+  @media print{
+    body{background:#fff;font-size:11.5px}
+    .toolbar,.no-print{display:none!important}
+    .sheet{max-width:none;margin:0;padding:0;box-shadow:none}
+    ::placeholder{color:transparent}
+    input[type=text]:focus,textarea:focus{background:transparent}
+    h2{margin-top:18px}
+    .comp{margin:7px 0}
+    table,tr{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <button class="primary" onclick="window.print()">Imprimir / Guardar PDF</button>
+  <button onclick="limpiar()">Formulario en blanco</button>
+  <span id="saved">Los datos se guardan automáticamente en este navegador.</span>
+</div>
+
+<main class="sheet">
+
+  <header class="head">
+    <div>
+      <div class="org">Grupo Sugumi · Centro de Venta Mayorista</div>
+      <h1>Evaluación de Liderazgo y Habilidades Blandas<br><span style="font-size:17px;color:var(--ink)">Encargado de Almacén · Confirmación en el puesto</span></h1>
+    </div>
+    <div class="meta">
+      <span class="badge">CONFIDENCIAL</span><br>
+      Referencia: Ficha Técnica FT.10<br>
+      Manual GMEG00-E01 (ed. 1, 15/02/2019)<br>
+      Destino: Recursos Humanos
+    </div>
+  </header>
+
+  <h2>1. Datos generales</h2>
+  <table>
+    <tr><td class="lbl">Nombre del evaluado</td><td><input type="text" data-k="nombre" placeholder="Nombre completo"></td></tr>
+    <tr><td class="lbl">Puesto</td><td><input type="text" data-k="puesto" value="Encargado de Almacén (centro mayorista)"></td></tr>
+    <tr><td class="lbl">Fecha de asignación al puesto</td><td><input type="text" data-k="asig" placeholder="dd/mm/aaaa (aprox. hace 3 meses)"></td></tr>
+    <tr><td class="lbl">Período evaluado</td><td>Del <input type="text" class="inline" data-k="desde" placeholder="dd/mm/aaaa"> al <input type="text" class="inline" data-k="hasta" placeholder="dd/mm/aaaa"></td></tr>
+    <tr><td class="lbl">Evaluador (jefe inmediato)</td><td><input type="text" data-k="evaluador" placeholder="Nombre"> <span class="small muted">Gerente de Logística y Distribución</span></td></tr>
+    <tr><td class="lbl">Personal a cargo</td><td><input type="text" data-k="personal" value="15–17 personas (recepción, despacho y auxiliares), con un encargado de recepción y una persona de apoyo en el liderazgo del piso"></td></tr>
+    <tr><td class="lbl">Fecha de la evaluación</td><td><input type="text" data-k="fecha" placeholder="dd/mm/aaaa"></td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>Propósito.</strong> Determinar si la persona demuestra las <strong>competencias de liderazgo y habilidades blandas</strong> que el puesto exige para confirmarse oficialmente en él, y emitir la recomendación a Recursos Humanos.
+  </div>
+
+  <h2>2. Enfoque y contexto de la evaluación</h2>
+  <p>El centro mayorista opera además como <strong>centro de acopio del grupo</strong>: cada contenedor o compra grande se distribuye primero a las 11 sucursales (10 detallistas y 1 mayorista) y el remanente queda para los vendedores de calle. Este flujo depende de un equipo de 15–17 personas coordinado bajo presión, por lo que <strong>el factor decisivo del puesto es la calidad del liderazgo</strong>: cómo dirige, comunica, desarrolla y sostiene al equipo.</p>
+  <div class="callout">
+    <strong>Cómo usar este instrumento</strong>
+    <ul>
+      <li>Se evalúan <strong>conductas observadas</strong>, no la personalidad ni los indicadores numéricos. Las métricas operativas solo sirven como evidencia de <em>cómo</em> lidera.</li>
+      <li>Para cada competencia, compare lo observado con los descriptores de nivel 1, 3 y 5 y asigne el puntaje (los niveles 2 y 4 son intermedios).</li>
+      <li>Registre <strong>al menos un ejemplo concreto</strong> (situación → lo que hizo → resultado). Un puntaje sin evidencia no es válido.</li>
+      <li>Use <strong>N/A</strong> solo si no hubo oportunidad real de observar la conducta.</li>
+    </ul>
+  </div>
+
+  <div class="keep"><h3>Escala de calificación</h3>
+  <table class="scale">
+    <tr><th class="num">Puntaje</th><th>Nivel</th><th>Descripción conductual</th></tr>
+    <tr><td>5</td><td>Sobresaliente</td><td>Demuestra la conducta de forma consistente y ejemplar; es referente para el equipo y otras áreas.</td></tr>
+    <tr><td>4</td><td>Cumple plenamente</td><td>Demuestra la conducta de forma consistente, sin necesidad de recordatorios.</td></tr>
+    <tr><td>3</td><td>Cumple parcialmente</td><td>Demuestra la conducta con frecuencia, pero no de forma consistente; requiere seguimiento.</td></tr>
+    <tr><td>2</td><td>Por debajo de lo esperado</td><td>La conducta aparece pocas veces; requiere acompañamiento constante.</td></tr>
+    <tr><td>1</td><td>Deficiente</td><td>No demuestra la conducta o muestra la conducta contraria; afecta al equipo.</td></tr>
+    <tr><td>N/A</td><td>Sin evidencia</td><td>No hubo oportunidad de observarla. No cuenta en el promedio.</td></tr>
+  </table></div>
+
+  <div id="blocks"></div>
+
+  <h2>8. Pulso del equipo <span class="w">Referencial · sin peso</span></h2>
+  <p class="small muted">Recoja de forma privada la percepción de 3 colaboradores (idealmente uno de recepción, uno de despacho y el encargado de recepción o la persona de apoyo). No anote nombres. Escala 1–5. Sirve para contrastar la percepción del evaluador con la del equipo.</p>
+  <table class="pulse" id="pulse"></table>
+
+  <h2>9. Fortalezas y oportunidades de liderazgo</h2>
+  <h3>Fortalezas de liderazgo observadas</h3>
+  <textarea class="tall" data-k="fortalezas" placeholder="Conductas que el evaluado debe mantener y que lo distinguen como líder…"></textarea>
+  <h3>Oportunidades de mejora</h3>
+  <textarea class="tall" data-k="oportunidades" placeholder="Conductas concretas que debe desarrollar…"></textarea>
+  <h3>Competencia prioritaria a desarrollar en los próximos 90 días</h3>
+  <input type="text" data-k="prioritaria" placeholder="Ej.: A2 Delegación y empoderamiento">
+
+  <h2 class="pb">10. Resultado consolidado</h2>
+  <table id="summary">
+    <tr><th>Bloque de competencias</th><th class="num">Promedio (1–5)</th><th class="num">Peso</th><th class="num">Ponderado</th></tr>
+  </table>
+  <div class="result-box">
+    <div class="card"><div class="small muted">Puntaje final</div><div class="big" id="total">—</div><div class="small muted">sobre 5.00</div></div>
+    <div class="card"><div class="small muted">Resultado</div><div class="big" id="band" style="font-size:20px;padding-top:6px">—</div><div class="small" id="bandRec"></div></div>
+  </div>
+  <div id="alerts"></div>
+
+  <h3>Interpretación</h3>
+  <table id="bands">
+    <tr><th>Rango</th><th>Resultado</th><th>Recomendación sugerida</th></tr>
+    <tr data-min="4.2"><td>4.20 – 5.00</td><td>Sobresaliente</td><td>Confirmar en el puesto</td></tr>
+    <tr data-min="3.5"><td>3.50 – 4.19</td><td>Satisfactorio</td><td>Confirmar en el puesto, con plan de desarrollo de liderazgo</td></tr>
+    <tr data-min="3"><td>3.00 – 3.49</td><td>Aceptable con reservas</td><td>Extender el período de prueba 60–90 días con metas conductuales claras</td></tr>
+    <tr data-min="0"><td>Menos de 3.00</td><td>Insatisfactorio</td><td>No confirmar; evaluar reubicación en un rol sin personal a cargo o reemplazo</td></tr>
+  </table>
+  <p class="small muted"><strong>Regla de prevalencia:</strong> si cualquier competencia del bloque A (Liderazgo de personas) o del bloque C (Inteligencia emocional) obtiene 2 o menos, o si el resultado queda cerca de un límite, el criterio del evaluador y del gerente prevalece sobre la fórmula y debe justificarse en la sección 11.</p>
+
+  <h2>11. Recomendación a Recursos Humanos</h2>
+  <div class="checks">
+    <label><input type="checkbox" data-k="r1"> Confirmar oficialmente en el puesto</label>
+    <label><input type="checkbox" data-k="r2"> Confirmar con plan de desarrollo de liderazgo (sección 12)</label>
+    <label><input type="checkbox" data-k="r3"> Extender período de evaluación — plazo: <input type="text" class="inline" data-k="plazo" placeholder="60 / 90 días"></label>
+    <label><input type="checkbox" data-k="r4"> No confirmar en el puesto</label>
+  </div>
+  <h3>Justificación de la recomendación</h3>
+  <textarea class="tall" data-k="justificacion" placeholder="Fundamente la decisión con las conductas observadas más relevantes…"></textarea>
+
+  <h2>12. Plan de desarrollo de liderazgo</h2>
+  <p class="small muted">Acciones: mentoría con el gerente, formación en liderazgo de equipos, práctica guiada de retroalimentación, reuniones de arranque de turno, etc. El indicador de logro debe ser una <strong>conducta observable</strong>.</p>
+  <table id="plan">
+    <tr><th style="width:20%">Competencia</th><th>Acción de desarrollo</th><th style="width:15%">Responsable</th><th style="width:12%">Fecha límite</th><th style="width:24%">Conducta esperada (indicador)</th></tr>
+  </table>
+
+  <h2>13. Comentarios del evaluado</h2>
+  <textarea class="tall" data-k="comentarios" placeholder="Espacio para que el evaluado exprese su opinión sobre la evaluación…"></textarea>
+  <p class="small muted">La firma del evaluado confirma que recibió y conversó la evaluación, no necesariamente que está de acuerdo con ella.</p>
+
+  <section class="keep">
+  <h2>14. Firmas</h2>
+  <table class="sign">
+    <tr><th>Rol</th><th>Nombre</th><th>Firma</th><th style="width:16%">Fecha</th></tr>
+    <tr><td>Evaluado</td><td><input type="text" data-k="f1"></td><td></td><td></td></tr>
+    <tr><td>Evaluador / Jefe inmediato</td><td><input type="text" data-k="f2"></td><td></td><td></td></tr>
+    <tr><td>Gerente de Logística y Distribución</td><td><input type="text" data-k="f3"></td><td></td><td></td></tr>
+    <tr><td>Recursos Humanos</td><td><input type="text" data-k="f4"></td><td></td><td></td></tr>
+  </table>
+
+  <div class="foot">
+    <span>Grupo Sugumi · Centro de Venta Mayorista · Evaluación de Liderazgo – Encargado de Almacén</span>
+    <span>Documento confidencial · Uso exclusivo de Recursos Humanos</span>
+  </div>
+</section>
+</main>
+
+<script>
+const BLOCKS = [
+  { id:"A", n:3, title:"Liderazgo de personas", w:35,
+    intro:"Cómo dirige, desarrolla e inspira al equipo de piso (recepción, despacho y auxiliares).",
+    items:[
+      ["Dirección y claridad de expectativas","Asigna prioridades, roles y responsables al iniciar la jornada y ante cada contenedor.",
+       "El equipo trabaja sin dirección clara; las prioridades cambian sin explicación.","Da instrucciones, pero a veces incompletas o tardías; el equipo pregunta con frecuencia.","Todos conocen su rol y prioridades; anticipa y comunica los cambios antes de que ocurran."],
+      ["Delegación y empoderamiento","Delega en el encargado de recepción y en la persona de apoyo, con autoridad y seguimiento.",
+       "Centraliza todo o delega sin seguimiento ni respaldo.","Delega tareas, pero retiene decisiones que sus segundos podrían tomar.","Delega responsabilidades completas, respalda las decisiones de sus segundos y los hace crecer."],
+      ["Desarrollo y retroalimentación","Forma a su gente, reconoce logros y corrige a tiempo; evalúa a su personal.",
+       "No retroalimenta o solo señala errores en público.","Retroalimenta de forma ocasional, mayormente correctiva.","Retroalimenta de forma oportuna y específica, reconoce en público y corrige en privado; forma relevos."],
+      ["Ejemplo y credibilidad","Es coherente entre lo que exige y lo que hace.",
+       "Exige normas que él/ella misma no cumple (puntualidad, orden, seguridad).","Generalmente coherente, con lapsos que el equipo nota.","Es modelo de puntualidad, orden, seguridad y trato; el equipo lo toma como referente."],
+      ["Cohesión y trabajo en equipo","Integra a recepción, despacho y auxiliares como un solo equipo.",
+       "Hay grupos aislados y fricción entre áreas o turnos.","El equipo colabora en lo básico cuando se le pide.","El equipo se apoya espontáneamente en los picos de trabajo; hay sentido de “nosotros”."],
+      ["Motivación y clima laboral","Genera compromiso y un ambiente de respeto; cuida la estabilidad del equipo.",
+       "Desmotivación, quejas, ausentismo o renuncias atribuibles a su gestión.","Clima estable, sin iniciativas propias para mejorarlo.","Clima positivo y estable; el equipo muestra compromiso y orgullo por su trabajo."]
+    ]},
+  { id:"B", n:4, title:"Comunicación e influencia", w:20,
+    intro:"Cómo se comunica con su equipo y cómo influye en otras áreas y sucursales.",
+    items:[
+      ["Escucha activa y comunicación con el equipo","Escucha, verifica que lo comunicado se entendió y cuida el tono.",
+       "No escucha; tono inadecuado o comunicación confusa.","Comunica correctamente, pero en una sola vía.","Escucha, pide opiniones, confirma comprensión y mantiene un tono respetuoso aun bajo presión."],
+      ["Coordinación con otras áreas y sucursales","Logística, Compras, Ventas, Contabilidad, las 11 sucursales y los vendedores de calle.",
+       "Genera malentendidos o tensiones; otras áreas se quejan de la comunicación.","Coordina e informa cuando se le solicita.","Informa de forma proactiva; las demás áreas lo ven como un contacto confiable y resolutivo."],
+      ["Negociación e influencia","Logra acuerdos sobre prioridades, horarios y recursos sin imponer ni ceder sin criterio.",
+       "Impone o cede sin criterio; evita negociar.","Logra acuerdos en situaciones sencillas.","Logra acuerdos beneficiosos para ambas partes y convence con argumentos y datos."],
+      ["Conversaciones difíciles","Aborda bajo desempeño, indisciplina o errores de su equipo.",
+       "Las evita o reacciona con dureza o en público.","Las aborda tarde o con resultados parciales.","Las aborda a tiempo, en privado, con respeto y cierra con acuerdos claros y seguimiento."]
+    ]},
+  { id:"C", n:5, title:"Inteligencia emocional y manejo de la presión", w:20,
+    intro:"Cómo se gestiona a sí mismo y a los demás en los momentos críticos (contenedores, picos de despacho, faltantes).",
+    items:[
+      ["Autocontrol bajo presión","Mantiene la calma y la cortesía cuando la operación se complica.",
+       "Pierde el control; grita, culpa o transmite ansiedad al equipo.","Se mantiene funcional, aunque su tensión afecta al equipo.","Mantiene la serenidad y transmite seguridad; el equipo se ordena a su alrededor."],
+      ["Manejo de conflictos","Interviene en desacuerdos entre colaboradores o con otras áreas.",
+       "Ignora los conflictos o toma partido sin escuchar.","Interviene cuando el conflicto ya escaló.","Detecta los conflictos temprano, escucha a las partes y facilita una solución justa."],
+      ["Toma de decisiones en momentos críticos","Decide con criterio cuando no hay tiempo ni toda la información.",
+       "Se paraliza o decide de forma impulsiva y sin consultar.","Decide, pero tarde o escalando más de lo necesario.","Decide a tiempo con buen criterio, comunica la decisión y asume sus consecuencias."],
+      ["Adaptabilidad y resiliencia","Se ajusta a cambios de prioridad y se recupera de los errores.",
+       "Se resiste a los cambios o se desanima ante los contratiempos.","Se adapta tras un período de resistencia.","Se adapta rápido, ayuda al equipo a adaptarse y aprende de cada contratiempo."]
+    ]},
+  { id:"D", n:6, title:"Actitud y autogestión", w:15,
+    intro:"Disposición personal que sostiene su liderazgo en el tiempo.",
+    items:[
+      ["Proactividad e iniciativa","Se anticipa a los problemas y propone mejoras sin que se lo pidan.",
+       "Espera instrucciones; reacciona solo cuando el problema ya ocurrió.","Propone mejoras ocasionalmente.","Anticipa problemas, propone y ejecuta mejoras por iniciativa propia."],
+      ["Responsabilidad y compromiso","Asume los resultados del equipo como propios.",
+       "Justifica los errores o culpa al equipo u otras áreas.","Asume su responsabilidad cuando se le señala.","Asume los errores del equipo como propios, da la cara y corrige sin buscar culpables."],
+      ["Apertura al aprendizaje y a la retroalimentación","Recibe críticas y las convierte en cambios visibles.",
+       "Se pone a la defensiva y no cambia.","Acepta la retroalimentación, con cambios parciales.","Pide retroalimentación activamente y muestra cambios concretos en poco tiempo."],
+      ["Integridad y confianza","Actúa con honestidad y transparencia, en especial con el inventario y su personal.",
+       "Oculta información o hay dudas sobre su manejo.","Es honesto, aunque poco transparente al reportar problemas.","Reporta los problemas a tiempo, aunque le afecten; es confiable para el equipo y la gerencia."]
+    ]},
+  { id:"E", n:7, title:"Liderazgo aplicado a la operación", w:10,
+    intro:"Se evalúa cómo moviliza al equipo para lograr la operación, no la métrica en sí. Los indicadores disponibles (despachos, inventario, informes) se anotan solo como evidencia.",
+    items:[
+      ["Planificación y organización del equipo","Organiza turnos y tareas para la recepción de contenedores y la distribución a las 11 sucursales.",
+       "Improvisa; el equipo se sobrecarga o queda ocioso.","Planifica lo básico; los picos lo toman por sorpresa.","Planifica con anticipación; el equipo sabe qué hacer en cada escenario."],
+      ["Sentido de urgencia que transmite","Moviliza al equipo cuando hay contenedores, despachos o pedidos urgentes.",
+       "El equipo no percibe la urgencia; hay retrasos repetidos.","Moviliza al equipo, aunque con insistencia o presión.","El equipo responde con rapidez y orden porque entiende el porqué."],
+      ["Seguimiento de compromisos","Cumple y hace cumplir lo acordado con su jefe y su equipo.",
+       "Compromisos olvidados o incumplidos sin aviso.","Cumple la mayoría, con recordatorios.","Cumple lo acordado y avisa a tiempo cuando algo está en riesgo."],
+      ["Cultura de orden, seguridad y normas","Logra que el equipo cumpla las normas de seguridad, orden y procedimientos.",
+       "Tolera incumplimientos; el orden depende de su presencia.","Las normas se cumplen cuando él/ella supervisa.","El equipo cumple las normas por convicción, aun en su ausencia."]
+    ]}
+];
+
+const PULSE = [
+  "Me comunica con claridad lo que espera de mí",
+  "Me trata con respeto, incluso cuando hay presión",
+  "Me da retroalimentación que me ayuda a mejorar",
+  "Puedo acercarme a él/ella con problemas o ideas",
+  "Es justo/a al asignar tareas y reconocer el trabajo",
+  "Lo/la considero un ejemplo a seguir"
+];
+
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render(){
+  let html = "";
+  BLOCKS.forEach(b => {
+    html += `<div class="keep"><h2>${b.n}. Bloque ${b.id} · ${esc(b.title)} <span class="w">Peso ${b.w} %</span></h2>
+      <p class="small muted">${esc(b.intro)}</p>`;
+    b.items.forEach((it, i) => {
+      const code = b.id + (i+1), name = "s_" + code;
+      const opts = ["1","2","3","4","5","N/A"].map(v =>
+        `<label><input type="radio" name="${name}" value="${v}" data-k="${name}"><span>${v}</span></label>`).join("");
+      html += `<div class="comp">
+        <div class="comp-h"><div class="id">${code}</div>
+          <div><div class="t">${esc(it[0])}</div><div class="d">${esc(it[1])}</div></div>
+          <div class="rate" role="radiogroup" aria-label="Puntaje ${code}">${opts}</div></div>
+        <div class="anchors"><div><b>Nivel 1</b>${esc(it[2])}</div><div><b>Nivel 3</b>${esc(it[3])}</div><div><b>Nivel 5</b>${esc(it[4])}</div></div>
+        <div class="comp-b"><label class="ev">Conducta observada / ejemplo concreto (situación → acción → resultado)</label>
+          <textarea data-k="e_${code}"></textarea></div></div>${i===0?'</div>':''}`;
+    });
+    html += `<div class="blocksum">Promedio del bloque ${b.id}<output id="avg_${b.id}">—</output></div>`;
+  });
+  $("#blocks").innerHTML = html;
+
+  let p = `<tr><th>Afirmación</th><th class="num">Colab. 1</th><th class="num">Colab. 2</th><th class="num">Colab. 3</th><th class="num">Promedio</th></tr>`;
+  PULSE.forEach((t, i) => {
+    p += `<tr><td>${esc(t)}</td>${[1,2,3].map(c => `<td class="num"><input type="text" inputmode="numeric" maxlength="1" data-k="p_${i}_${c}" class="pv"></td>`).join("")}<td class="num"><output id="pa_${i}">—</output></td></tr>`;
+  });
+  p += `<tr><th>Promedio general del pulso</th><th></th><th></th><th></th><th class="num"><output id="pulseAvg">—</output></th></tr>`;
+  $("#pulse").innerHTML = p;
+
+  let s = "";
+  BLOCKS.forEach(b => {
+    s += `<tr><td>${b.id}. ${esc(b.title)}</td><td class="num" id="sa_${b.id}">—</td><td class="num">${b.w} %</td><td class="num" id="sw_${b.id}">—</td></tr>`;
+  });
+  s += `<tr><th>Total</th><th></th><th class="num">100 %</th><th class="num" id="sTotal">—</th></tr>
+        <tr><td colspan="4" class="small muted">Fórmula: (A × 0.35) + (B × 0.20) + (C × 0.20) + (D × 0.15) + (E × 0.10). Si un bloque queda completo en N/A, su peso se reparte proporcionalmente entre los demás. Pulso del equipo (referencial): <strong id="sPulse">—</strong></td></tr>`;
+  $("#summary").insertAdjacentHTML("beforeend", s);
+
+  let pl = "";
+  for (let r = 1; r <= 4; r++) pl += `<tr>${["comp","acc","resp","fecha","ind"].map(c => `<td><input type="text" data-k="pl_${r}_${c}"></td>`).join("")}</tr>`;
+  $("#plan").insertAdjacentHTML("beforeend", pl);
+}
+
+const fmt = v => v == null ? "—" : v.toFixed(2);
+
+function calc(){
+  const avgs = {}, low = [];
+  BLOCKS.forEach(b => {
+    const vals = [];
+    b.items.forEach((_, i) => {
+      const code = b.id + (i+1);
+      const c = document.querySelector(`input[name="s_${code}"]:checked`);
+      if (c && c.value !== "N/A") {
+        const v = +c.value; vals.push(v);
+        if (v <= 2 && (b.id === "A" || b.id === "C")) low.push(`${code} ${b.items[i][0]} (${v})`);
+      }
+    });
+    avgs[b.id] = vals.length ? vals.reduce((a, c) => a + c, 0) / vals.length : null;
+    $("#avg_" + b.id).textContent = fmt(avgs[b.id]);
+    $("#sa_" + b.id).textContent = fmt(avgs[b.id]);
+  });
+
+  const active = BLOCKS.filter(b => avgs[b.id] != null);
+  const wsum = active.reduce((a, b) => a + b.w, 0);
+  let total = null;
+  BLOCKS.forEach(b => {
+    const part = avgs[b.id] == null || !wsum ? null : avgs[b.id] * b.w / wsum;
+    $("#sw_" + b.id).textContent = fmt(part);
+    if (part != null) total = (total || 0) + part;
+  });
+  const complete = active.length === BLOCKS.length;
+  $("#sTotal").textContent = fmt(total);
+  $("#total").textContent = fmt(total);
+
+  document.querySelectorAll("#bands tr[data-min]").forEach(tr => tr.classList.remove("hit"));
+  if (total != null) {
+    const hit = [...document.querySelectorAll("#bands tr[data-min]")].find(tr => total >= +tr.dataset.min);
+    hit.classList.add("hit");
+    $("#band").textContent = hit.children[1].textContent;
+    $("#bandRec").textContent = hit.children[2].textContent + (complete ? "" : " · (evaluación incompleta)");
+  } else { $("#band").textContent = "—"; $("#bandRec").textContent = ""; }
+
+  // Pulso del equipo
+  const all = [];
+  PULSE.forEach((_, i) => {
+    const v = [1,2,3].map(c => +document.querySelector(`[data-k="p_${i}_${c}"]`).value).filter(x => x >= 1 && x <= 5);
+    all.push(...v);
+    $("#pa_" + i).textContent = v.length ? fmt(v.reduce((a, c) => a + c, 0) / v.length) : "—";
+  });
+  const pAvg = all.length ? all.reduce((a, c) => a + c, 0) / all.length : null;
+  $("#pulseAvg").textContent = fmt(pAvg);
+  $("#sPulse").textContent = fmt(pAvg);
+
+  const alerts = [];
+  if (low.length) alerts.push(`<strong>Alerta de liderazgo:</strong> competencias críticas con 2 o menos — ${low.map(esc).join("; ")}. Aplique la regla de prevalencia y justifique la decisión.`);
+  if (pAvg != null && avgs.A != null && Math.abs(pAvg - avgs.A) >= 1)
+    alerts.push(`<strong>Brecha de percepción:</strong> el pulso del equipo (${fmt(pAvg)}) difiere en 1 punto o más del bloque A según el evaluador (${fmt(avgs.A)}). Converse esta diferencia antes de cerrar la evaluación.`);
+  if (total != null && [3, 3.5, 4.2].some(t => Math.abs(total - t) <= 0.1))
+    alerts.push(`<strong>Resultado cercano a un límite:</strong> el criterio del evaluador y del gerente prevalece sobre la fórmula.`);
+  $("#alerts").innerHTML = alerts.map(a => `<div class="callout warn">${a}</div>`).join("");
+}
+
+function grow(t){ t.style.height = "auto"; t.style.height = t.scrollHeight + 2 + "px"; }
+
+const KEY = "sugumi-eval-liderazgo-almacen-v1";
+function save(){
+  const d = {};
+  document.querySelectorAll("[data-k]").forEach(el => {
+    if (el.type === "radio") { if (el.checked) d[el.dataset.k] = el.value; }
+    else if (el.type === "checkbox") d[el.dataset.k] = el.checked;
+    else d[el.dataset.k] = el.value;
+  });
+  try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) {}
+}
+function load(){
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+  if (!d) return;
+  document.querySelectorAll("[data-k]").forEach(el => {
+    const v = d[el.dataset.k];
+    if (v === undefined) return;
+    if (el.type === "radio") el.checked = el.value === v;
+    else if (el.type === "checkbox") el.checked = !!v;
+    else el.value = v;
+  });
+}
+function limpiar(){
+  if (!confirm("¿Borrar todos los datos y dejar el formulario en blanco?")) return;
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  location.reload();
+}
+
+render();
+load();
+document.querySelectorAll("textarea").forEach(grow);
+calc();
+document.addEventListener("input", e => {
+  if (e.target.classList.contains("pv")) e.target.value = e.target.value.replace(/[^1-5]/g, "");
+  if (e.target.tagName === "TEXTAREA") grow(e.target);
+  calc(); save();
+});
+document.addEventListener("change", () => { calc(); save(); });
+window.addEventListener("beforeprint", () => document.querySelectorAll("textarea").forEach(grow));
+</script>
+</body>
+</html>
